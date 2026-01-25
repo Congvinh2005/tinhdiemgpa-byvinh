@@ -44,7 +44,7 @@
 
         .input-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
             gap: 15px;
             align-items: end;
             margin-bottom: 15px;
@@ -217,6 +217,10 @@
                     <label>KT (Cuối kỳ)</label>
                     <input type="number" id="kt" placeholder="0-10" min="0" max="10" step="0.1">
                 </div>
+                <div class="input-group">
+                    <label>Số tín</label>
+                    <input type="number" id="credits" placeholder="1-10" min="1" max="10" step="1">
+                </div>
                 <button class="btn btn-add" onclick="addSubject()">➕ Thêm môn</button>
             </div>
         </div>
@@ -227,6 +231,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Tên môn</th>
+                        <th>Số tín</th>
                         <th>CC</th>
                         <th>GK</th>
                         <th>KT</th>
@@ -251,6 +256,10 @@
             <div class="summary-item">
                 <div class="summary-label">Tổng số môn</div>
                 <div class="summary-value" id="totalSubjects">0</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Tổng số tín</div>
+                <div class="summary-value" id="totalCredits">0</div>
             </div>
             <div class="summary-item">
                 <div class="summary-label">Điểm TB hệ 10</div>
@@ -318,6 +327,7 @@
             const cc = parseFloat(document.getElementById('cc').value);
             const gk = parseFloat(document.getElementById('gk').value);
             const kt = parseFloat(document.getElementById('kt').value);
+            const credits = parseInt(document.getElementById('credits').value) || 1;
 
             if (!name || isNaN(cc) || isNaN(gk) || isNaN(kt)) {
                 alert('Vui lòng nhập đầy đủ thông tin!');
@@ -326,6 +336,11 @@
 
             if (cc < 0 || cc > 10 || gk < 0 || gk > 10 || kt < 0 || kt > 10) {
                 alert('Điểm phải trong khoảng 0-10!');
+                return;
+            }
+
+            if (isNaN(credits) || credits < 1) {
+                alert('Số tín chỉ phải là số nguyên dương!');
                 return;
             }
 
@@ -339,6 +354,7 @@
                 cc,
                 gk,
                 kt,
+                credits,
                 grade10,
                 letterGrade,
                 grade4,
@@ -349,6 +365,7 @@
             document.getElementById('cc').value = '';
             document.getElementById('gk').value = '';
             document.getElementById('kt').value = '';
+            document.getElementById('credits').value = '';
 
             renderTable();
             updateSummary();
@@ -369,6 +386,7 @@
             document.getElementById('cc').value = subject.cc;
             document.getElementById('gk').value = subject.gk;
             document.getElementById('kt').value = subject.kt;
+            document.getElementById('credits').value = subject.credits;
 
             // Change the "Add Subject" button to "Update Subject" temporarily
             const addButton = document.querySelector('.btn-add');
@@ -383,6 +401,7 @@
             const cc = parseFloat(document.getElementById('cc').value);
             const gk = parseFloat(document.getElementById('gk').value);
             const kt = parseFloat(document.getElementById('kt').value);
+            const credits = parseInt(document.getElementById('credits').value) || 1;
 
             if (!name || isNaN(cc) || isNaN(gk) || isNaN(kt)) {
                 alert('Vui lòng nhập đầy đủ thông tin!');
@@ -391,6 +410,11 @@
 
             if (cc < 0 || cc > 10 || gk < 0 || gk > 10 || kt < 0 || kt > 10) {
                 alert('Điểm phải trong khoảng 0-10!');
+                return;
+            }
+
+            if (isNaN(credits) || credits < 1) {
+                alert('Số tín chỉ phải là số nguyên dương!');
                 return;
             }
 
@@ -405,6 +429,7 @@
                 cc,
                 gk,
                 kt,
+                credits,
                 grade10,
                 letterGrade,
                 grade4,
@@ -416,6 +441,7 @@
             document.getElementById('cc').value = '';
             document.getElementById('gk').value = '';
             document.getElementById('kt').value = '';
+            document.getElementById('credits').value = '';
 
             // Reset the button back to "Add Subject"
             const addButton = document.querySelector('.btn-add');
@@ -446,6 +472,7 @@
                 <tr>
                     <td>${index + 1}</td>
                     <td style="text-align: left; font-weight: 600;">${sub.name}</td>
+                    <td>${sub.credits}</td>
                     <td>${sub.cc.toFixed(1)}</td>
                     <td>${sub.gk.toFixed(1)}</td>
                     <td>${sub.kt.toFixed(1)}</td>
@@ -466,18 +493,31 @@
             document.getElementById('totalSubjects').textContent = total;
 
             if (total === 0) {
+                document.getElementById('totalCredits').textContent = '0';
                 document.getElementById('avgGrade10').textContent = '0.00';
                 document.getElementById('avgGrade4').textContent = '0.00';
                 document.getElementById('overallRank').textContent = '---';
                 return;
             }
 
-            const avg10 = subjects.reduce((sum, sub) => sum + sub.grade10, 0) / total;
-            const avg4 = subjects.reduce((sum, sub) => sum + sub.grade4, 0) / total;
+            // Calculate weighted averages based on credit hours
+            let totalCredits = 0;
+            let weightedSum10 = 0;
+            let weightedSum4 = 0;
 
-            document.getElementById('avgGrade10').textContent = avg10.toFixed(2);
-            document.getElementById('avgGrade4').textContent = avg4.toFixed(2);
-            document.getElementById('overallRank').textContent = getRank(avg10);
+            subjects.forEach(sub => {
+                totalCredits += sub.credits;
+                weightedSum10 += sub.grade10 * sub.credits;
+                weightedSum4 += sub.grade4 * sub.credits;
+            });
+
+            const weightedAvg10 = totalCredits > 0 ? weightedSum10 / totalCredits : 0;
+            const weightedAvg4 = totalCredits > 0 ? weightedSum4 / totalCredits : 0;
+
+            document.getElementById('totalCredits').textContent = totalCredits;
+            document.getElementById('avgGrade10').textContent = weightedAvg10.toFixed(2);
+            document.getElementById('avgGrade4').textContent = weightedAvg4.toFixed(2);
+            document.getElementById('overallRank').textContent = getRank(weightedAvg10);
         }
 
         document.getElementById('subjectName').addEventListener('keypress', function(e) {
