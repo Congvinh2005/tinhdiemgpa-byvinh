@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Tính Điểm Nhanh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* background: linear-gradient(135deg, #ece6e1 0%, #e36a13 100%); */
+            background-color: #afc5cc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d12828;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #66ea9b;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-add {
+            background: #64ae4e;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #26bd7e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-update {
+            background: #f39c12;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+
+        .btn-update:hover {
+            background: #e67e22;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #605c60;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .summary {
+            /* background: linear-gradient(135deg, #c3580c 0%, #eceaee 100%); */
+            background-color: rgb(245, 229, 241);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            color: black;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            font-size: 2em;
+            /* font-weight: bold; */
+            color: rgb(14, 13, 13);
+        }
+
+        .grade-a { color: #27ae60; font-weight: bold; }
+        .grade-b { color: #2ecc71; font-weight: bold; }
+        .grade-c { color: #f39c12; font-weight: bold; }
+        .grade-d { color: #e67e22; font-weight: bold; }
+        .grade-f { color: #e74c3c; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Bảng Tính Điểm GPA</h1>
+
+        <div class="input-section">
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Tên môn học</label>
+                    <input type="text" id="subjectName" placeholder="Ví dụ: Toán cao cấp">
+                </div>
+                <div class="input-group">
+                    <label>CC (Chuyên cần)</label>
+                    <input type="number" id="cc" placeholder="0-10" min="0" max="10" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>GK (Giữa kỳ)</label>
+                    <input type="number" id="gk" placeholder="0-10" min="0" max="10" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>KT (Cuối kỳ)</label>
+                    <input type="number" id="kt" placeholder="0-10" min="0" max="10" step="0.1">
+                </div>
+                <button class="btn btn-add" onclick="addSubject()">➕ Thêm môn</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên môn</th>
+                        <th>CC</th>
+                        <th>GK</th>
+                        <th>KT</th>
+                        <th>Điểm hệ 10</th>
+                        <th>Điểm chữ</th>
+                        <th>Điểm hệ 4</th>
+                        <th>Xếp loại</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="gradeTable">
+                    <tr>
+                        <td colspan="10" style="text-align: center; color: #999; padding: 30px;">
+                            Chưa có môn học nào. Hãy thêm môn học mới!
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <div class="summary-item">
+                <div class="summary-label">Tổng số môn</div>
+                <div class="summary-value" id="totalSubjects">0</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Điểm TB hệ 10</div>
+                <div class="summary-value" id="avgGrade10">0.00</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Điểm TB hệ 4</div>
+                <div class="summary-value" id="avgGrade4">0.00</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Xếp loại chung</div>
+                <div class="summary-value" id="overallRank">---</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let subjects = [];
+
+        function getLetterGrade(grade10) {
+            if (grade10 >= 8.5) return 'A';
+            if (grade10 >= 8.0) return 'B+';
+            if (grade10 >= 7.0) return 'B';
+            if (grade10 >= 6.5) return 'C+';
+            if (grade10 >= 5.5) return 'C';
+            if (grade10 >= 5.0) return 'D+';
+            if (grade10 >= 4.0) return 'D';
+            return 'F';
+        }
+
+        function getGrade4(grade10) {
+            if (grade10 >= 8.5) return 4.0;
+            if (grade10 >= 8.0) return 3.5;
+            if (grade10 >= 7.0) return 3.0;
+            if (grade10 >= 6.5) return 2.5;
+            if (grade10 >= 5.5) return 2.0;
+            if (grade10 >= 5.0) return 1.5;
+            if (grade10 >= 4.0) return 1.0;
+            return 0;
+        }
+
+    function getRank(grade10) {
+    if (grade10 >= 9.0) return 'Xuất sắc';
+    if (grade10 >= 8.5) return 'Giỏi';
+    if (grade10 >= 8.0) return 'Khá giỏi';
+    if (grade10 >= 7.0) return 'Khá';
+    if (grade10 >= 6.5) return 'Trung bình khá';
+    if (grade10 >= 5.5) return 'Trung bình';
+    if (grade10 >= 5.0) return 'Trung bình yếu';
+    if (grade10 >= 4.0) return 'Yếu';
+    return 'Kém (Không đạt)';
+}
+
+
+        function getGradeClass(letter) {
+            if (letter === 'A' || letter === 'B+') return 'grade-a';
+            if (letter === 'B' || letter === 'C+') return 'grade-b';
+            if (letter === 'C' || letter === 'D+') return 'grade-c';
+            if (letter === 'D') return 'grade-d';
+            return 'grade-f';
+        }
+
+        function addSubject() {
+            const name = document.getElementById('subjectName').value.trim();
+            const cc = parseFloat(document.getElementById('cc').value);
+            const gk = parseFloat(document.getElementById('gk').value);
+            const kt = parseFloat(document.getElementById('kt').value);
+
+            if (!name || isNaN(cc) || isNaN(gk) || isNaN(kt)) {
+                alert('Vui lòng nhập đầy đủ thông tin!');
+                return;
+            }
+
+            if (cc < 0 || cc > 10 || gk < 0 || gk > 10 || kt < 0 || kt > 10) {
+                alert('Điểm phải trong khoảng 0-10!');
+                return;
+            }
+
+            const grade10 = cc * 0.1 + gk * 0.3 + kt * 0.6;
+            const letterGrade = getLetterGrade(grade10);
+            const grade4 = getGrade4(grade10);
+            const rank = getRank(grade10);
+
+            subjects.push({
+                name,
+                cc,
+                gk,
+                kt,
+                grade10,
+                letterGrade,
+                grade4,
+                rank
+            });
+
+            document.getElementById('subjectName').value = '';
+            document.getElementById('cc').value = '';
+            document.getElementById('gk').value = '';
+            document.getElementById('kt').value = '';
+
+            renderTable();
+            updateSummary();
+        }
+
+        function deleteSubject(index) {
+            subjects.splice(index, 1);
+            renderTable();
+            updateSummary();
+        }
+
+        function editSubject(index) {
+            // Get the subject to edit
+            const subject = subjects[index];
+
+            // Populate the input fields with the current values
+            document.getElementById('subjectName').value = subject.name;
+            document.getElementById('cc').value = subject.cc;
+            document.getElementById('gk').value = subject.gk;
+            document.getElementById('kt').value = subject.kt;
+
+            // Change the "Add Subject" button to "Update Subject" temporarily
+            const addButton = document.querySelector('.btn-add');
+            addButton.textContent = '✏️ Cập nhật';
+            addButton.onclick = function() {
+                updateSubject(index);
+            };
+        }
+
+        function updateSubject(index) {
+            const name = document.getElementById('subjectName').value.trim();
+            const cc = parseFloat(document.getElementById('cc').value);
+            const gk = parseFloat(document.getElementById('gk').value);
+            const kt = parseFloat(document.getElementById('kt').value);
+
+            if (!name || isNaN(cc) || isNaN(gk) || isNaN(kt)) {
+                alert('Vui lòng nhập đầy đủ thông tin!');
+                return;
+            }
+
+            if (cc < 0 || cc > 10 || gk < 0 || gk > 10 || kt < 0 || kt > 10) {
+                alert('Điểm phải trong khoảng 0-10!');
+                return;
+            }
+
+            const grade10 = cc * 0.1 + gk * 0.3 + kt * 0.6;
+            const letterGrade = getLetterGrade(grade10);
+            const grade4 = getGrade4(grade10);
+            const rank = getRank(grade10);
+
+            // Update the subject in the array
+            subjects[index] = {
+                name,
+                cc,
+                gk,
+                kt,
+                grade10,
+                letterGrade,
+                grade4,
+                rank
+            };
+
+            // Reset the input fields
+            document.getElementById('subjectName').value = '';
+            document.getElementById('cc').value = '';
+            document.getElementById('gk').value = '';
+            document.getElementById('kt').value = '';
+
+            // Reset the button back to "Add Subject"
+            const addButton = document.querySelector('.btn-add');
+            addButton.textContent = '➕ Thêm môn';
+            addButton.onclick = function() {
+                addSubject();
+            };
+
+            renderTable();
+            updateSummary();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('gradeTable');
+
+            if (subjects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" style="text-align: center; color: #999; padding: 30px;">
+                            Chưa có môn học nào. Hãy thêm môn học mới!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = subjects.map((sub, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="text-align: left; font-weight: 600;">${sub.name}</td>
+                    <td>${sub.cc.toFixed(1)}</td>
+                    <td>${sub.gk.toFixed(1)}</td>
+                    <td>${sub.kt.toFixed(1)}</td>
+                    <td><strong>${sub.grade10.toFixed(2)}</strong></td>
+                    <td class="${getGradeClass(sub.letterGrade)}">${sub.letterGrade}</td>
+                    <td>${sub.grade4.toFixed(1)}</td>
+                    <td>${sub.rank}</td>
+                    <td>
+                        <button class="btn btn-update" onclick="editSubject(${index})">✏️ Sửa</button>
+                        <button class="btn btn-delete" onclick="deleteSubject(${index})">🗑️ Xoá</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateSummary() {
+            const total = subjects.length;
+            document.getElementById('totalSubjects').textContent = total;
+
+            if (total === 0) {
+                document.getElementById('avgGrade10').textContent = '0.00';
+                document.getElementById('avgGrade4').textContent = '0.00';
+                document.getElementById('overallRank').textContent = '---';
+                return;
+            }
+
+            const avg10 = subjects.reduce((sum, sub) => sum + sub.grade10, 0) / total;
+            const avg4 = subjects.reduce((sum, sub) => sum + sub.grade4, 0) / total;
+
+            document.getElementById('avgGrade10').textContent = avg10.toFixed(2);
+            document.getElementById('avgGrade4').textContent = avg4.toFixed(2);
+            document.getElementById('overallRank').textContent = getRank(avg10);
+        }
+
+        document.getElementById('subjectName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addSubject();
+        });
+        document.getElementById('cc').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addSubject();
+        });
+        document.getElementById('gk').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addSubject();
+        });
+        document.getElementById('kt').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addSubject();
+        });
+    </script>
+
+    <footer style="text-align: center; margin-top: 20px; padding: 10px; color: #666; font-size: 0.9em;">
+        <p>@Van Vinh</p>
+    </footer>
+</body>
+</html>
