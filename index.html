@@ -184,13 +184,277 @@
         .grade-d { color: #e67e22; font-weight: bold; }
         .grade-f { color: #e74c3c; font-weight: bold; }
 
+        .options-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .mode-selection {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .mode-selection label, .method-selection label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .method-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .method-selection p {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .preview-score {
+            margin-left: auto;
+            font-weight: bold;
+            color: #d12828;
+            background: #f9eaea;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+        
+        .method-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
-            .input-row {
-                grid-template-columns: 1fr;
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                border-radius: 10px;
             }
 
             h1 {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+
+            .input-section {
+                padding: 12px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .input-group {
+                width: 100%;
+            }
+
+            .input-group input {
+                width: 100%;
+            }
+
+            .mode-selection {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .method-selection label {
+                font-size: 0.85em;
+            }
+
+            .method-row {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .preview-score {
+                margin-left: 0;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            #calcBtn {
+                width: 100%;
+            }
+
+            #addBtnGroup {
+                text-align: center !important;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                font-size: 0.75em;
+                min-width: 700px;
+            }
+
+            th, td {
+                padding: 8px 5px;
+                white-space: nowrap;
+            }
+
+            th {
+                font-size: 0.85em;
+            }
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 15px;
+            }
+
+            .summary-value {
                 font-size: 1.5em;
+            }
+
+            .options-section {
+                padding: 10px;
+            }
+
+            .mode-selection {
+                gap: 10px;
+            }
+
+            .method-selection {
+                gap: 8px;
+            }
+
+            .method-row span:first-of-type {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .preview-score {
+                font-size: 0.8em;
+                padding: 2px 8px;
+            }
+
+            .input-group label {
+                font-size: 0.85em;
+            }
+
+            input {
+                padding: 12px 10px;
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+
+            .btn-delete, .btn-update {
+                padding: 8px 10px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.1em;
+            }
+
+            .summary {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .summary-value {
+                font-size: 1.3em;
+            }
+
+            .summary-label {
+                font-size: 0.8em;
+            }
+
+            .input-section {
+                padding: 10px;
+            }
+
+            .options-section {
+                padding: 8px;
+            }
+
+            .method-selection label {
+                font-size: 0.8em;
+            }
+
+            .preview-score {
+                font-size: 0.75em;
+                padding: 1px 6px;
+            }
+
+            table {
+                font-size: 0.7em;
+                min-width: 650px;
+            }
+
+            th, td {
+                padding: 6px 4px;
+            }
+
+            th {
+                font-size: 0.8em;
+            }
+
+            .btn-delete, .btn-update {
+                padding: 6px 8px;
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding: 8px;
+            }
+
+            h1 {
+                font-size: 1em;
+            }
+
+            .summary {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .summary-value {
+                font-size: 1.2em;
+            }
+
+            table {
+                font-size: 0.65em;
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 5px 3px;
             }
         }
     </style>
@@ -200,6 +464,31 @@
         <h1>📊 Bảng Tính Điểm GPA</h1>
 
         <div class="input-section">
+            <div class="options-section">
+                <div class="mode-selection">
+                    <label><input type="radio" name="calcMode" value="semester" checked onchange="toggleMode()"> Tính cả học kỳ</label>
+                    <label><input type="radio" name="calcMode" value="single" onchange="toggleMode()"> Tính 1 môn</label>
+                </div>
+                <div class="method-selection">
+                    <p>Chọn phương pháp tính điểm:</p>
+                    <label class="method-row">
+                        <input type="radio" name="calcMethod" value="1" checked>
+                        <span>Phương pháp 1: 10% CC - 30% GK - 60% KT</span>
+                        <span id="previewMethod1" class="preview-score">---</span>
+                    </label>
+                    <label class="method-row">
+                        <input type="radio" name="calcMethod" value="2">
+                        <span>Phương pháp 2: 20% CC - 30% GK - 50% KT</span>
+                        <span id="previewMethod2" class="preview-score">---</span>
+                    </label>
+                    <label class="method-row">
+                        <input type="radio" name="calcMethod" value="3">
+                        <span>Phương pháp 3: 10% CC - 20% GK - 70% KT</span>
+                        <span id="previewMethod3" class="preview-score">---</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="input-row">
                 <div class="input-group">
                     <label>Tên môn học</label>
@@ -207,25 +496,28 @@
                 </div>
                 <div class="input-group">
                     <label>CC (Chuyên cần)</label>
-                    <input type="number" id="cc" placeholder="0-10" min="0" max="10" step="0.1">
+                    <input type="number" id="cc" placeholder="0-10" min="0" max="10" step="0.1" oninput="updatePreviews()">
                 </div>
                 <div class="input-group">
                     <label>GK (Giữa kỳ)</label>
-                    <input type="number" id="gk" placeholder="0-10" min="0" max="10" step="0.1">
+                    <input type="number" id="gk" placeholder="0-10" min="0" max="10" step="0.1" oninput="updatePreviews()">
                 </div>
                 <div class="input-group">
                     <label>KT (Cuối kỳ)</label>
-                    <input type="number" id="kt" placeholder="0-10" min="0" max="10" step="0.1">
+                    <input type="number" id="kt" placeholder="0-10" min="0" max="10" step="0.1" oninput="updatePreviews()">
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="creditsGroup">
                     <label>Số tín</label>
                     <input type="number" id="credits" placeholder="1-10" min="1" max="10" step="1">
                 </div>
-                <button class="btn btn-add" onclick="addSubject()">➕ Thêm môn</button>
+                <button class="btn btn-update" id="calcBtn" onclick="calculateSingleSubject()">🧮 Tính điểm</button>
+            </div>
+            <div class="action-row" id="addBtnGroup" style="text-align: right;">
+                <button class="btn btn-add" id="addBtn" onclick="handleAddOrUpdate()">➕ Thêm môn</button>
             </div>
         </div>
 
-        <div class="table-wrapper">
+        <div class="table-wrapper" id="tableWrapper">
             <table>
                 <thead>
                     <tr>
@@ -244,7 +536,7 @@
                 </thead>
                 <tbody id="gradeTable">
                     <tr>
-                        <td colspan="10" style="text-align: center; color: #999; padding: 30px;">
+                        <td colspan="11" style="text-align: center; color: #999; padding: 30px;">
                             Chưa có môn học nào. Hãy thêm môn học mới!
                         </td>
                     </tr>
@@ -257,7 +549,7 @@
                 <div class="summary-label">Tổng số môn</div>
                 <div class="summary-value" id="totalSubjects">0</div>
             </div>
-            <div class="summary-item">
+            <div class="summary-item" id="summaryTotalCreditsItem">
                 <div class="summary-label">Tổng số tín</div>
                 <div class="summary-value" id="totalCredits">0</div>
             </div>
@@ -278,6 +570,87 @@
 
     <script>
         let subjects = [];
+        let editingIndex = -1;
+
+        function toggleMode() {
+            const mode = document.querySelector('input[name="calcMode"]:checked').value;
+            const creditsGroup = document.getElementById('creditsGroup');
+            const tableWrapper = document.getElementById('tableWrapper');
+            const summaryTotalCreditsItem = document.getElementById('summaryTotalCreditsItem');
+            const addBtnGroup = document.getElementById('addBtnGroup');
+            
+            if (mode === 'single') {
+                creditsGroup.style.display = 'none';
+                tableWrapper.style.display = 'none';
+                summaryTotalCreditsItem.style.display = 'none';
+                addBtnGroup.style.display = 'none';
+            } else {
+                creditsGroup.style.display = 'flex';
+                tableWrapper.style.display = 'block';
+                summaryTotalCreditsItem.style.display = 'block';
+                addBtnGroup.style.display = 'block';
+                editingIndex = -1;
+                const btn = document.getElementById('addBtn');
+                btn.textContent = '➕ Thêm môn';
+                btn.classList.add('btn-add');
+                btn.classList.remove('btn-update');
+            }
+            updateSummary();
+        }
+
+        function updatePreviews() {
+            const cc = parseFloat(document.getElementById('cc').value) || 0;
+            const gk = parseFloat(document.getElementById('gk').value) || 0;
+            const kt = parseFloat(document.getElementById('kt').value) || 0;
+            
+            const m1 = cc * 0.1 + gk * 0.3 + kt * 0.6;
+            const m2 = cc * 0.2 + gk * 0.3 + kt * 0.5;
+            const m3 = cc * 0.1 + gk * 0.2 + kt * 0.7;
+
+            document.getElementById('previewMethod1').textContent = m1.toFixed(2);
+            document.getElementById('previewMethod2').textContent = m2.toFixed(2);
+            document.getElementById('previewMethod3').textContent = m3.toFixed(2);
+        }
+
+        function calculateScore(cc, gk, kt) {
+            const method = document.querySelector('input[name="calcMethod"]:checked').value;
+            if (method === '1') return cc * 0.1 + gk * 0.3 + kt * 0.6;
+            if (method === '2') return cc * 0.2 + gk * 0.3 + kt * 0.5;
+            if (method === '3') return cc * 0.1 + gk * 0.2 + kt * 0.7;
+            return 0;
+        }
+
+        function handleAddOrUpdate() {
+            if (editingIndex > -1) {
+                updateSubject(editingIndex);
+            } else {
+                addSubject();
+            }
+        }
+
+        function calculateSingleSubject() {
+            const cc = parseFloat(document.getElementById('cc').value);
+            const gk = parseFloat(document.getElementById('gk').value);
+            const kt = parseFloat(document.getElementById('kt').value);
+
+            if (isNaN(cc) || isNaN(gk) || isNaN(kt)) {
+                alert('Vui lòng nhập đầy đủ điểm!');
+                return;
+            }
+
+            if (cc < 0 || cc > 10 || gk < 0 || gk > 10 || kt < 0 || kt > 10) {
+                alert('Điểm phải trong khoảng 0-10!');
+                return;
+            }
+
+            const grade10 = calculateScore(cc, gk, kt);
+            
+            document.getElementById('totalSubjects').textContent = '1 (Đơn)';
+            document.getElementById('totalCredits').textContent = '---';
+            document.getElementById('avgGrade10').textContent = grade10.toFixed(2);
+            document.getElementById('avgGrade4').textContent = getGrade4(grade10).toFixed(2);
+            document.getElementById('overallRank').textContent = getRank(grade10);
+        }
 
         function getLetterGrade(grade10) {
             if (grade10 >= 8.5) return 'A';
@@ -344,7 +717,7 @@
                 return;
             }
 
-            const grade10 = cc * 0.1 + gk * 0.3 + kt * 0.6;
+            const grade10 = calculateScore(cc, gk, kt);
             const letterGrade = getLetterGrade(grade10);
             const grade4 = getGrade4(grade10);
             const rank = getRank(grade10);
@@ -366,6 +739,7 @@
             document.getElementById('gk').value = '';
             document.getElementById('kt').value = '';
             document.getElementById('credits').value = '';
+            updatePreviews();
 
             renderTable();
             updateSummary();
@@ -378,22 +752,21 @@
         }
 
         function editSubject(index) {
-            // Get the subject to edit
+            editingIndex = index;
             const subject = subjects[index];
 
-            // Populate the input fields with the current values
             document.getElementById('subjectName').value = subject.name;
             document.getElementById('cc').value = subject.cc;
             document.getElementById('gk').value = subject.gk;
             document.getElementById('kt').value = subject.kt;
             document.getElementById('credits').value = subject.credits;
+            
+            updatePreviews();
 
-            // Change the "Add Subject" button to "Update Subject" temporarily
-            const addButton = document.querySelector('.btn-add');
-            addButton.textContent = '✏️ Cập nhật';
-            addButton.onclick = function() {
-                updateSubject(index);
-            };
+            const btn = document.getElementById('addBtn');
+            btn.textContent = '✏️ Cập nhật';
+            btn.classList.remove('btn-add');
+            btn.classList.add('btn-update');
         }
 
         function updateSubject(index) {
@@ -418,12 +791,11 @@
                 return;
             }
 
-            const grade10 = cc * 0.1 + gk * 0.3 + kt * 0.6;
+            const grade10 = calculateScore(cc, gk, kt);
             const letterGrade = getLetterGrade(grade10);
             const grade4 = getGrade4(grade10);
             const rank = getRank(grade10);
 
-            // Update the subject in the array
             subjects[index] = {
                 name,
                 cc,
@@ -436,19 +808,18 @@
                 rank
             };
 
-            // Reset the input fields
             document.getElementById('subjectName').value = '';
             document.getElementById('cc').value = '';
             document.getElementById('gk').value = '';
             document.getElementById('kt').value = '';
             document.getElementById('credits').value = '';
+            updatePreviews();
 
-            // Reset the button back to "Add Subject"
-            const addButton = document.querySelector('.btn-add');
-            addButton.textContent = '➕ Thêm môn';
-            addButton.onclick = function() {
-                addSubject();
-            };
+            editingIndex = -1;
+            const btn = document.getElementById('addBtn');
+            btn.textContent = '➕ Thêm môn';
+            btn.classList.add('btn-add');
+            btn.classList.remove('btn-update');
 
             renderTable();
             updateSummary();
@@ -460,7 +831,7 @@
             if (subjects.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="10" style="text-align: center; color: #999; padding: 30px;">
+                        <td colspan="11" style="text-align: center; color: #999; padding: 30px;">
                             Chưa có môn học nào. Hãy thêm môn học mới!
                         </td>
                     </tr>
@@ -489,6 +860,9 @@
         }
 
         function updateSummary() {
+            const mode = document.querySelector('input[name="calcMode"]:checked').value;
+            if (mode === 'single') return; // Do not update summary from subjects if in single mode
+            
             const total = subjects.length;
             document.getElementById('totalSubjects').textContent = total;
 
@@ -520,18 +894,21 @@
             document.getElementById('overallRank').textContent = getRank(weightedAvg10);
         }
 
-        document.getElementById('subjectName').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addSubject();
-        });
-        document.getElementById('cc').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addSubject();
-        });
-        document.getElementById('gk').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addSubject();
-        });
-        document.getElementById('kt').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addSubject();
-        });
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                const mode = document.querySelector('input[name="calcMode"]:checked').value;
+                if (mode === 'single') {
+                    calculateSingleSubject();
+                } else {
+                    handleAddOrUpdate();
+                }
+            }
+        }
+
+        document.getElementById('subjectName').addEventListener('keypress', handleEnter);
+        document.getElementById('cc').addEventListener('keypress', handleEnter);
+        document.getElementById('gk').addEventListener('keypress', handleEnter);
+        document.getElementById('kt').addEventListener('keypress', handleEnter);
     </script>
 
     <footer style="text-align: center; margin-top: 20px; padding: 10px; color: #666; font-size: 0.9em;">
