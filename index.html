@@ -510,10 +510,11 @@
                     <label>Số tín</label>
                     <input type="number" id="credits" placeholder="1-10" min="1" max="10" step="1">
                 </div>
-                <button class="btn btn-update" id="calcBtn" onclick="calculateSingleSubject()">🧮 Tính điểm</button>
+                <button type="button" class="btn btn-update" id="calcBtn" onclick="calculateSingleSubject()">🧮 Tính điểm</button>
             </div>
-            <div class="action-row" id="addBtnGroup" style="text-align: right;">
-                <button class="btn btn-add" id="addBtn" onclick="handleAddOrUpdate()">➕ Thêm môn</button>
+            <div class="action-row" id="addBtnGroup" style="text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn" style="background: #95a5a6; color: white;" onclick="resetForm()">🔄 Làm mới</button>
+                <button type="button" class="btn btn-add" id="addBtn" onclick="handleAddOrUpdate()">➕ Thêm môn</button>
             </div>
         </div>
 
@@ -628,7 +629,28 @@
             }
         }
 
+        function resetForm() {
+            document.getElementById('subjectName').value = '';
+            document.getElementById('cc').value = '';
+            document.getElementById('gk').value = '';
+            document.getElementById('kt').value = '';
+            document.getElementById('credits').value = '';
+            updatePreviews();
+
+            editingIndex = -1;
+            const btn = document.getElementById('addBtn');
+            btn.textContent = '➕ Thêm môn';
+            btn.classList.add('btn-add');
+            btn.classList.remove('btn-update');
+        }
+
         function calculateSingleSubject() {
+            const mode = document.querySelector('input[name="calcMode"]:checked').value;
+            if (mode === 'semester') {
+                handleAddOrUpdate();
+                return;
+            }
+
             const cc = parseFloat(document.getElementById('cc').value);
             const gk = parseFloat(document.getElementById('gk').value);
             const kt = parseFloat(document.getElementById('kt').value);
@@ -852,8 +874,8 @@
                     <td>${sub.grade4.toFixed(1)}</td>
                     <td>${sub.rank}</td>
                     <td>
-                        <button class="btn btn-update" onclick="editSubject(${index})">✏️ Sửa</button>
-                        <button class="btn btn-delete" onclick="deleteSubject(${index})">🗑️ Xoá</button>
+                        <button type="button" class="btn btn-update" onclick="editSubject(${index})">✏️ Sửa</button>
+                        <button type="button" class="btn btn-delete" onclick="deleteSubject(${index})">🗑️ Xoá</button>
                     </td>
                 </tr>
             `).join('');
@@ -896,6 +918,7 @@
 
         function handleEnter(e) {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 const mode = document.querySelector('input[name="calcMode"]:checked').value;
                 if (mode === 'single') {
                     calculateSingleSubject();
@@ -912,7 +935,7 @@
     </script>
 
     <footer style="text-align: center; margin-top: 20px; padding: 10px; color: #666; font-size: 0.9em;">
-        <p>@Van Vinh</p>
+        <p>@Tính Điểm GPA UTT -Vinhdv</p>
     </footer>
 </body>
 </html>
